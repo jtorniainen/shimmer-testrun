@@ -27,6 +27,8 @@ if RUN_PROCESSING
 	data = read_shimmer(eda_1);
 	[event_times, event_list] = read_events(event_1);
 	data = trim_eda(data, event_times(1), event_times(end));
+	event_times = event_times(2:end - 1);
+	event_list = event_list(2:end - 1);
 	data = generate_eda_dataset(data, event_times, event_list);
 	save(fullfile(outdir, 'sub1.mat'), 'data');
 
@@ -34,6 +36,8 @@ if RUN_PROCESSING
 	data = read_shimmer(eda_2);
 	[event_times, event_list] = read_events(event_2);
 	data = trim_eda(data, event_times(1), event_times(end));
+	event_times = event_times(2:end - 1);
+	event_list = event_list(2:end - 1);
 	data = generate_eda_dataset(data, event_times, event_list);
 	save(fullfile(outdir, 'sub2.mat'), 'data');
 
@@ -41,6 +45,8 @@ if RUN_PROCESSING
 	data = read_shimmer(eda_3);
 	[event_times, event_list] = read_events(event_3);
 	data = trim_eda(data, event_times(1), event_times(end));
+	event_times = event_times(2:end - 1);
+	event_list = event_list(2:end - 1);
 	data = generate_eda_dataset(data, event_times, event_list);
 	save(fullfile(outdir, 'sub3.mat'), 'data');
 end
