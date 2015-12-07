@@ -1,16 +1,20 @@
 
-%event_file = '/ukko/projects/ReKnow/data/shimmer/event_list.csv';
-%shimmer_file = '/ukko/projects/ReKnow/data/shimmer/shimmer.csv';
-%empatica_file = '/ukko/projects/ReKnow/data/shimmer/empatica_eda.csv';
+event_file = '/ukko/projects/ReKnow/data/shimmer/event_list.csv';
+shimmer_file = '/ukko/projects/ReKnow/data/shimmer/shimmer.csv';
+empatica_file = '/ukko/projects/ReKnow/data/shimmer/empatica_eda.csv';
 
 % local over ride
-event_file = '/home/jari/work/shimmer/testrun/data/event_list.csv';
-shimmer_file = '/home/jari/work/shimmer/testrun/data/shimmer.csv';
-empatica_file = '/home/jari/work/shimmer/testrun/data/empatica_eda.csv';
+%event_file = '/home/jari/work/shimmer/testrun/data/event_list.csv';
+%shimmer_file = '/home/jari/work/shimmer/testrun/data/shimmer.csv';
+%empatica_file = '/home/jari/work/shimmer/testrun/data/empatica_eda.csv';
 
-RUN_PROCESSING = true;
-RUN_LEDA = true;
-RUN_ANALYSIS = true;
+
+% You can control which part of the analysis chain are run. This is for
+% skipping computationally intesive steps you've already done
+%
+RUN_PROCESSING = 		true; % Read/time/convert data to Ledalab format
+RUN_LEDA = 				true; % Run Ledalab batch processing for all files
+RUN_ANALYSIS = 			true; % Calculate results
 
 outdir = '/tmp/eda_testing';
 
@@ -47,7 +51,6 @@ if RUN_PROCESSING
 	datasets{end + 1} = data;
 	hdr{end + 1} = 'shimmer';
 
-	plot_raw(datasets, hdr);
 end
 
 % Run LEDALAB

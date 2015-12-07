@@ -7,11 +7,13 @@ function data = read_shimmer(filename)
 	fgetl(fid);
 	hdr = fgetl(fid);
 	fclose(fid);
-	hdr = regexp(hdr, ',', 'split');
+	hdr = regexp(hdr, '\t', 'split');
 
 	% Read data
-	data = csvread(filename, 3);
+	idx = 6;
+	fprintf(1, 'Reading data from column %d (%s)', idx, hdr{idx});
+	data = dlmread(filename, '\t', 3);
 	time = data(:, 1) / 1e3;
-	eda = (1 ./ (data(:, 6) * 1e3)) * 1e6;  % Converting kOhms to uS
+	eda = (1 ./ (data(:, idx) * 1e3)) * 1e6;  % Converting kOhms to uS
 	data = [time, eda];
 end
