@@ -21,12 +21,12 @@ function analyze_shimmer(indir)
 	datasets = {};
 	use_amps = false;
 
-	load(fullfile(indir, 'empatica.mat'));
-	load(fullfile(indir, 'empatica_scrlist.mat'));
-	hdr{end + 1} = 'empatica';
+	load(fullfile(indir, 'sub1.mat'));
+	load(fullfile(indir, 'sub1_scrlist.mat'));
+	hdr{end + 1} = 'subject 1';
 
 	datasets{end + 1} = data;
-	phasic_data{end + 1} = analysis.phasicData;
+	phasic_data{end + 1} = analysis.phasicData./max(analysis.phasicData);
 	phasic_time{end + 1}  = data.time;
 
 	event = data.event;
@@ -35,13 +35,33 @@ function analyze_shimmer(indir)
 	clear analysis;
 	clear scrList;
 
-	load(fullfile(indir, 'shimmer.mat'));
-	load(fullfile(indir, 'shimmer_scrlist.mat'));
-	hdr{end + 1} = 'shimmer';
+	load(fullfile(indir, 'sub2.mat'));
+	load(fullfile(indir, 'sub2_scrlist.mat'));
+	hdr{end + 1} = 'subject 2';
 
 	datasets{end + 1} = data;
-	phasic_data{end + 1} = analysis.phasicData;
+	phasic_data{end + 1} = analysis.phasicData./max(analysis.phasicData);
 	phasic_time{end + 1}  = data.time;
+
+	event = data.event;
+
+	clear data;
+	clear analysis;
+	clear scrList;
+
+	load(fullfile(indir, 'sub3.mat'));
+	load(fullfile(indir, 'sub3_scrlist.mat'));
+	hdr{end + 1} = 'subject 3';
+
+	datasets{end + 1} = data;
+	phasic_data{end + 1} = analysis.phasicData./max(analysis.phasicData);
+	phasic_time{end + 1}  = data.time;
+
+	event = data.event;
+
+	clear data;
+	clear analysis;
+	clear scrList;
 
 	plot_shimmer(phasic_time, phasic_data, datasets, event, hdr);
 
