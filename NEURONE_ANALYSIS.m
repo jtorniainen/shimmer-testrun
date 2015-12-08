@@ -3,7 +3,6 @@ SESSIONS = [1, 2, 3];
 OUTDIR = '/tmp/neurone_analysis/';
 EVENTS = '/home/jari/work/shimmer/testrun2/video_offsets.csv';
 
-
 % You can control which part of the analysis chain are run. This is for
 % skipping computationally intesive steps you've already done
 %
