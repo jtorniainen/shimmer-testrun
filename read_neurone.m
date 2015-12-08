@@ -23,6 +23,11 @@ function read_neurone(indir, outdir, sessions, eventfile)
 		conductance = convert_to_siemens(data.signal.EDA.data);
 		fs = data.signal.EDA.samplingRate;
 		conductance = conductance(1:fs*max_length);
+		conductance = medfilt1(conductance, 100);  % Remove spike artifacts
+		% Need burn-offs because of transients (removing 1s)
+		conductance = conductance(fs:end);
+		event_times = event_times - 1;
+		conductance = conductance + abs(min(conductance));
 		time = linspace(0, length(conductance)/fs, length(conductance))';
 		eda = [time, conductance];
 

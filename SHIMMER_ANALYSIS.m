@@ -14,14 +14,14 @@ RUN_PROCESSING = 		true; % Read/time/convert data to Ledalab format
 RUN_LEDA = 				true; % Run Ledalab batch processing for all files
 RUN_ANALYSIS = 			true; % Calculate results
 
-outdir = '/tmp/eda_testing_video';
+OUTDIR = '/tmp/eda_testing_video';
 
 if RUN_PROCESSING
 
 	% Getting rid of old results (hope you copied them somewhere lol)
-	if isdir(outdir), rmdir(outdir, 's'); end;
+	if isdir(OUTDIR), rmdir(OUTDIR, 's'); end;
 
-	mkdir(outdir)
+	mkdir(OUTDIR)
 
 	% Load data and events
 	data = read_shimmer(eda_1);
@@ -30,7 +30,7 @@ if RUN_PROCESSING
 	event_times = event_times(2:end - 1);
 	event_list = event_list(2:end - 1);
 	data = generate_eda_dataset(data, event_times, event_list);
-	save(fullfile(outdir, 'sub1.mat'), 'data');
+	save(fullfile(OUTDIR, 'sub1.mat'), 'data');
 
 	% Load data and events
 	data = read_shimmer(eda_2);
@@ -39,7 +39,7 @@ if RUN_PROCESSING
 	event_times = event_times(2:end - 1);
 	event_list = event_list(2:end - 1);
 	data = generate_eda_dataset(data, event_times, event_list);
-	save(fullfile(outdir, 'sub2.mat'), 'data');
+	save(fullfile(OUTDIR, 'sub2.mat'), 'data');
 
 	% Load data and events
 	data = read_shimmer(eda_3);
@@ -48,15 +48,21 @@ if RUN_PROCESSING
 	event_times = event_times(2:end - 1);
 	event_list = event_list(2:end - 1);
 	data = generate_eda_dataset(data, event_times, event_list);
-	save(fullfile(outdir, 'sub3.mat'), 'data');
+	save(fullfile(OUTDIR, 'sub3.mat'), 'data');
 end
 
 % Run LEDALAB
 if RUN_LEDA
-	run_ledalab(outdir, 'mat');
+	Ledalab(OUTDIR, ...
+			'open', 'mat', ...
+			'analyze', 'CDA', ...
+			'optimize', 3, ...
+			'export_scrlist', [.01 1], ...
+			'export_era', [0 120 .01 1], ...
+			'overview', 1);
 end
 
 % Analyze and plot results
 if RUN_ANALYSIS
-	analyze_shimmer(outdir);
+	analyze_shimmer(OUTDIR);
 end
