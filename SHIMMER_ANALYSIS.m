@@ -1,13 +1,11 @@
+eda_1 = '/ukko/projects/ReKnow/Data/shimmer/testrun2/sub1.csv';
+event_1 = '/ukko/projects/ReKnow/Data/shimmer/testrun2/events1.csv';
 
-event_file = '/ukko/projects/ReKnow/data/shimmer/event_list.csv';
-shimmer_file = '/ukko/projects/ReKnow/data/shimmer/shimmer.csv';
-empatica_file = '/ukko/projects/ReKnow/data/shimmer/empatica_eda.csv';
+eda_2 = '/ukko/projects/ReKnow/Data/shimmer/testrun2/sub2.csv';
+event_2 = '/ukko/projects/ReKnow/Data/shimmer/testrun2/events2.csv';
 
-% local over ride
-%event_file = '/home/jari/work/shimmer/testrun/data/event_list.csv';
-%shimmer_file = '/home/jari/work/shimmer/testrun/data/shimmer.csv';
-%empatica_file = '/home/jari/work/shimmer/testrun/data/empatica_eda.csv';
-
+eda_3 = '/ukko/projects/ReKnow/Data/shimmer/testrun2/sub3.csv';
+event_3 = '/ukko/projects/ReKnow/Data/shimmer/testrun2/events3.csv';
 
 % You can control which part of the analysis chain are run. This is for
 % skipping computationally intesive steps you've already done
@@ -16,41 +14,41 @@ RUN_PROCESSING = 		true; % Read/time/convert data to Ledalab format
 RUN_LEDA = 				true; % Run Ledalab batch processing for all files
 RUN_ANALYSIS = 			true; % Calculate results
 
-outdir = '/tmp/eda_testing';
+outdir = '/tmp/eda_testing_video';
 
 if RUN_PROCESSING
+
+	% Getting rid of old results (hope you copied them somewhere lol)
 	if isdir(outdir), rmdir(outdir, 's'); end;
+
 	mkdir(outdir)
 
 	% Load data and events
-	[event_times, event_list] = read_events(event_file);
-	data_shimmer = read_shimmer(shimmer_file);
-	data_empatica = read_e4(empatica_file);
-
-	% Get event times and types
-	start_time = event_times(1);
-	stop_time = event_times(end);
+	data = read_shimmer(eda_1);
+	[event_times, event_list] = read_events(event_1);
+	data = trim_eda(data, event_times(1), event_times(end));
 	event_times = event_times(2:end - 1);
 	event_list = event_list(2:end - 1);
+	data = generate_eda_dataset(data, event_times, event_list);
+	save(fullfile(outdir, 'sub1.mat'), 'data');
 
-	% Trim datasets
-	data_empatica = trim_eda(data_empatica, start_time, stop_time);
-	data_shimmer = trim_eda(data_shimmer, start_time, stop_time);
+	% Load data and events
+	data = read_shimmer(eda_2);
+	[event_times, event_list] = read_events(event_2);
+	data = trim_eda(data, event_times(1), event_times(end));
+	event_times = event_times(2:end - 1);
+	event_list = event_list(2:end - 1);
+	data = generate_eda_dataset(data, event_times, event_list);
+	save(fullfile(outdir, 'sub2.mat'), 'data');
 
-	% Save data in Ledalab format
-	datasets = {};
-	hdr = {};
-
-	data = generate_eda_dataset(data_empatica, event_times, event_list);
-	save(fullfile(outdir, 'empatica.mat'), 'data');
-	datasets{end + 1} = data;
-	hdr{end + 1} = 'empatica';
-
-	data = generate_eda_dataset(data_shimmer, event_times, event_list);
-	save(fullfile(outdir, 'shimmer.mat'), 'data');
-	datasets{end + 1} = data;
-	hdr{end + 1} = 'shimmer';
-
+	% Load data and events
+	data = read_shimmer(eda_3);
+	[event_times, event_list] = read_events(event_3);
+	data = trim_eda(data, event_times(1), event_times(end));
+	event_times = event_times(2:end - 1);
+	event_list = event_list(2:end - 1);
+	data = generate_eda_dataset(data, event_times, event_list);
+	save(fullfile(outdir, 'sub3.mat'), 'data');
 end
 
 % Run LEDALAB
